@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# AutoMove United XML Sitemap
+Sitemap: https://automoveunited.com/sitemap.xml
