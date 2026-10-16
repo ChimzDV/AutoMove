@@ -34,6 +34,7 @@
     initReviewsCarousel();
     initBackToTop();
     initChatbot();
+    initUsaShippingMap();
   });
 
   /* ==========================================================================
@@ -1061,6 +1062,332 @@
           handleUserInput();
         }
       });
+    }
+  }
+
+  /* ==========================================================================
+     17. Interactive Animated USA Shipping Map (Why AutoMove United)
+     ========================================================================== */
+  function initUsaShippingMap() {
+    const stateElements = document.querySelectorAll('.amu-state-path');
+    const stateNameEl = document.getElementById('amu-map-state-name');
+    const stateBadgeEl = document.getElementById('amu-map-state-badge');
+    const stateSubEl = document.getElementById('amu-map-callout-sub');
+    const calloutEl = document.getElementById('amu-map-callout');
+
+    if (!stateElements.length || !stateNameEl) return;
+
+    const defaultState = {
+      name: 'Nationwide Auto Shipping',
+      badge: 'Daily Corridors',
+      sub: 'Hover over any state &bull; <strong>Click for shipping information and a free quote &rarr;</strong>'
+    };
+
+    function updateCallout(name, code) {
+      stateNameEl.textContent = name + (code ? ' (' + code + ')' : '');
+      stateBadgeEl.textContent = 'Active Corridor';
+      stateSubEl.innerHTML = 'Direct vehicle carrier routes in ' + name + '. <strong>Click for shipping information and a free quote &rarr;</strong>';
+    }
+
+    function resetCallout() {
+      stateNameEl.textContent = defaultState.name;
+      stateBadgeEl.textContent = defaultState.badge;
+      stateSubEl.innerHTML = defaultState.sub;
+    }
+
+    function handleStateClick(e, stateEl) {
+      e.preventDefault();
+      const stateName = stateEl.getAttribute('data-state') || '';
+      const stateCode = stateEl.getAttribute('data-code') || '';
+
+      // Find existing quote section or form
+      const quoteSection = document.getElementById('quote-section');
+      const quoteFormCard = document.getElementById('quote-form-card') || quoteSection;
+
+      if (quoteFormCard) {
+        quoteFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Focus pickup ZIP field if available
+        const pickupField = document.querySelector('#amu-hero-quote-form [name="Pick-Up-ZIP-Code"]');
+        if (pickupField) {
+          setTimeout(function () {
+            pickupField.focus();
+          }, 600);
+        }
+      } else {
+        // Fallback navigation to existing quote page
+        window.location.href = 'request-quote.html';
+      }
+    }
+
+    stateElements.forEach(function (el) {
+      // Desktop Hover
+      el.addEventListener('mouseenter', function () {
+        const name = el.getAttribute('data-state');
+        const code = el.getAttribute('data-code');
+        updateCallout(name, code);
+        el.classList.add('is-hovered');
+      });
+
+      el.addEventListener('mouseleave', function () {
+        resetCallout();
+        el.classList.remove('is-hovered');
+      });
+
+      // Click handling
+      el.addEventListener('click', function (e) {
+        handleStateClick(e, el);
+      });
+
+      // Touch handling for mobile devices
+      el.addEventListener('touchstart', function (e) {
+        stateElements.forEach(function (s) { s.classList.remove('is-hovered'); });
+        el.classList.add('is-hovered');
+        const name = el.getAttribute('data-state');
+        const code = el.getAttribute('data-code');
+        updateCallout(name, code);
+      }, { passive: true });
+
+      // Keyboard Accessibility (Enter / Space)
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleStateClick(e, el);
+        }
+      });
+
+      el.addEventListener('focus', function () {
+        const name = el.getAttribute('data-state');
+        const code = el.getAttribute('data-code');
+        updateCallout(name, code);
+      });
+
+      el.addEventListener('blur', function () {
+        resetCallout();
+      });
+    });
+
+    if (calloutEl) {
+      calloutEl.addEventListener('click', function (e) {
+        const quoteSection = document.getElementById('quote-section');
+        if (quoteSection) {
+          e.preventDefault();
+          quoteSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const pickupField = document.querySelector('#amu-hero-quote-form [name="Pick-Up-ZIP-Code"]');
+          if (pickupField) {
+            setTimeout(function () { pickupField.focus(); }, 600);
+          }
+        }
+      });
+    }
+
+    /* -------------------------------------------------------------------------
+       Random Truck Spawning & Route Gliding Animation System
+       ------------------------------------------------------------------------- */
+    const trucksLayer = document.getElementById('amu-map-trucks-layer') || document.querySelector('.amu-map-trucks-layer');
+    if (!trucksLayer) return;
+
+    const routeIds = [
+      'route-south-eb', 'route-south-wb',
+      'route-north-eb', 'route-north-wb',
+      'route-east-sb', 'route-east-nb',
+      'route-heart-sb', 'route-heart-nb',
+      'route-west-sb', 'route-west-nb',
+      'route-diag-wb', 'route-diag-eb',
+      'route-central-eb', 'route-central-wb',
+      'route-nw-eb', 'route-nw-wb',
+      'route-nplains-eb', 'route-nplains-wb',
+      'route-dakota-sb', 'route-dakota-nb',
+      'route-bldakota-eb', 'route-bldakota-wb',
+      'route-rocky-sb', 'route-rocky-nb'
+    ];
+
+    const routes = [];
+    routeIds.forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el && typeof el.getTotalLength === 'function') {
+        const len = el.getTotalLength();
+        if (len > 35) {
+          routes.push({ id: id, el: el, length: len, activeCount: 0 });
+        }
+      }
+    });
+
+    if (!routes.length) return;
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const activeTrucks = [];
+    const TARGET_ACTIVE = 10;
+    const FADE_TIME = 800; // ms for smooth appearance & disappearance
+
+    function spawnTruck(initialElapsed, now) {
+      if (!routes.length || prefersReducedMotion) return;
+
+      // Pick a route with bias toward currently underutilized routes
+      const candidates = routes.slice().sort(function (a, b) {
+        return (a.activeCount - b.activeCount) || (0.5 - Math.random());
+      });
+      const pool = candidates.slice(0, Math.min(6, candidates.length));
+      const route = pool[Math.floor(Math.random() * pool.length)];
+
+      const L = route.length;
+      // Variable speed between 34 and 52 SVG units per second
+      const speed = 34 + Math.random() * 18;
+      // Variable lifetime between 5.5s and 9.5s
+      let duration = 5500 + Math.random() * 4000;
+      let travelDist = speed * (duration / 1000);
+
+      const safeMargin = 25;
+      let startDist = safeMargin;
+      if (travelDist >= L - safeMargin * 2) {
+        travelDist = Math.max(10, L - safeMargin * 2);
+        duration = (travelDist / speed) * 1000;
+        startDist = safeMargin;
+      } else {
+        const maxStart = L - travelDist - safeMargin;
+        startDist = safeMargin + Math.random() * Math.max(0, maxStart - safeMargin);
+      }
+
+      // Create SVG group for truck
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', 'amu-live-truck');
+      g.setAttribute('pointer-events', 'none');
+      g.setAttribute('opacity', '0');
+
+      const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      use.setAttribute('href', '#amu-car-carrier-truck');
+      use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#amu-car-carrier-truck');
+      g.appendChild(use);
+      trucksLayer.appendChild(g);
+
+      route.activeCount++;
+
+      const truck = {
+        el: g,
+        route: route,
+        speed: speed,
+        duration: duration,
+        startDist: startDist,
+        startTime: (now || performance.now()) - (initialElapsed || 0)
+      };
+
+      activeTrucks.push(truck);
+      updateTruck(truck, now || performance.now());
+    }
+
+    function updateTruck(truck, now) {
+      const elapsed = now - truck.startTime;
+      if (elapsed >= truck.duration) {
+        return false;
+      }
+
+      // Smooth fade in and fade out
+      let opacity = 1;
+      if (elapsed < FADE_TIME) {
+        opacity = elapsed / FADE_TIME;
+      } else if (elapsed > truck.duration - FADE_TIME) {
+        opacity = Math.max(0, (truck.duration - elapsed) / FADE_TIME);
+      }
+
+      const dist = Math.min(truck.route.length, truck.startDist + (elapsed / 1000) * truck.speed);
+      const pt = truck.route.el.getPointAtLength(dist);
+
+      const lookAhead = Math.min(truck.route.length, dist + 4);
+      let angle = 0;
+      if (lookAhead > dist) {
+        const ptNext = truck.route.el.getPointAtLength(lookAhead);
+        angle = Math.atan2(ptNext.y - pt.y, ptNext.x - pt.x) * (180 / Math.PI);
+      } else {
+        const ptPrev = truck.route.el.getPointAtLength(Math.max(0, dist - 4));
+        angle = Math.atan2(pt.y - ptPrev.y, pt.x - ptPrev.x) * (180 / Math.PI);
+      }
+
+      truck.el.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ',' + pt.y.toFixed(2) + ') rotate(' + angle.toFixed(2) + ')');
+      truck.el.setAttribute('opacity', opacity.toFixed(3));
+      return true;
+    }
+
+    let rafId = null;
+    let isVisible = !document.hidden;
+    let isInView = true;
+    let lastSpawnTime = performance.now();
+    let nextSpawnDelay = 800;
+
+    function loop(now) {
+      rafId = null;
+
+      // Update active trucks
+      for (let i = activeTrucks.length - 1; i >= 0; i--) {
+        const t = activeTrucks[i];
+        if (!updateTruck(t, now)) {
+          if (t.el && t.el.parentNode) {
+            t.el.parentNode.removeChild(t.el);
+          }
+          t.route.activeCount = Math.max(0, t.route.activeCount - 1);
+          activeTrucks.splice(i, 1);
+        }
+      }
+
+      // Continuous staggered spawning
+      if (activeTrucks.length < TARGET_ACTIVE && now - lastSpawnTime >= nextSpawnDelay) {
+        spawnTruck(0, now);
+        lastSpawnTime = now;
+        nextSpawnDelay = 650 + Math.random() * 850;
+      }
+
+      scheduleNextFrame();
+    }
+
+    function scheduleNextFrame() {
+      if (!rafId && isVisible && isInView && !prefersReducedMotion) {
+        rafId = requestAnimationFrame(loop);
+      }
+    }
+
+    function stopAnimation() {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    }
+
+    // Seed initial trucks with staggered progress so the map is vibrant immediately
+    const initialNow = performance.now();
+    for (let i = 0; i < TARGET_ACTIVE; i++) {
+      const staggeredElapsed = (i / TARGET_ACTIVE) * 5500 + Math.random() * 800;
+      spawnTruck(staggeredElapsed, initialNow);
+    }
+    scheduleNextFrame();
+
+    // Pause when document is hidden to conserve battery & prevent timer accumulation
+    document.addEventListener('visibilitychange', function () {
+      isVisible = (document.visibilityState === 'visible');
+      if (isVisible) {
+        const now = performance.now();
+        activeTrucks.forEach(function (t) {
+          t.startTime = now - (Math.random() * (t.duration * 0.6));
+        });
+        lastSpawnTime = now;
+        scheduleNextFrame();
+      } else {
+        stopAnimation();
+      }
+    });
+
+    // Pause when map is scrolled out of viewport
+    const mapCard = document.getElementById('amu-why-map-card');
+    if (mapCard && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          isInView = entry.isIntersecting;
+          if (isInView) {
+            scheduleNextFrame();
+          } else {
+            stopAnimation();
+          }
+        });
+      }, { threshold: 0.05 });
+      observer.observe(mapCard);
     }
   }
 
