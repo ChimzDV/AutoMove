@@ -6267,3 +6267,259 @@ html.amu-anim-ready .amu-slide-in-right:not(.in-view) .amu-resource-card {
     animation: none !important;
   }
 }
+
+/* ==========================================================================
+   AutoMove United — Reusable Dynamic Quote Modal & Hero Starter Card
+   ========================================================================== */
+.amu-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
+  pointer-events: none;
+}
+
+.amu-modal.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.amu-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 17, 30, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.28s ease;
+}
+
+.amu-modal-dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 620px;
+  max-height: calc(100vh - 36px);
+  max-height: calc(100dvh - 36px);
+  background: var(--amu-white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 60px rgba(10, 27, 45, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(22px) scale(0.96);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+}
+
+.amu-modal.is-active .amu-modal-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.amu-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 20;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--amu-border);
+  background: var(--amu-white);
+  color: var(--amu-navy);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.amu-modal-close:hover {
+  background: var(--amu-navy);
+  color: var(--amu-white);
+  border-color: var(--amu-navy);
+  transform: rotate(90deg);
+}
+
+.amu-modal-content {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 32px 34px;
+}
+
+.amu-modal-header {
+  margin-bottom: 20px;
+  text-align: left;
+  padding-right: 44px;
+}
+
+.amu-modal-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--amu-red);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.amu-modal-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--amu-navy);
+  margin-bottom: 6px;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+.amu-modal-subtitle {
+  font-size: 0.92rem;
+  color: var(--amu-text-muted);
+  line-height: 1.45;
+}
+
+/* State Context Chip / Badge inside Modal */
+.amu-modal-state-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 102, 194, 0.08);
+  border: 1px solid rgba(10, 102, 194, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: var(--amu-navy);
+  gap: 8px;
+}
+
+.amu-modal-state-badge strong {
+  color: var(--amu-red);
+}
+
+.amu-modal-state-clear {
+  background: none;
+  border: none;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--amu-text-muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.amu-modal-state-clear:hover {
+  color: var(--amu-red);
+  background: rgba(10, 102, 194, 0.12);
+}
+
+/* Background scroll lock */
+body.amu-modal-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+/* Hero Starter Card Styling */
+.amu-hero-starter-card {
+  background: var(--amu-white);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-xl);
+  color: var(--amu-text-main);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.amu-starter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(10, 102, 194, 0.08);
+  color: var(--amu-red);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.amu-starter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--amu-red);
+  box-shadow: 0 0 8px rgba(10, 102, 194, 0.6);
+  animation: amuPulseDot 1.8s infinite;
+}
+
+@keyframes amuPulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.amu-starter-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--amu-border);
+}
+
+.amu-starter-perk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: var(--amu-text-muted);
+  font-weight: 500;
+}
+
+.amu-starter-perk svg {
+  color: var(--amu-green);
+  flex-shrink: 0;
+}
+
+/* Mobile Responsiveness for Modal and Starter Card */
+@media (max-width: 640px) {
+  .amu-modal {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .amu-modal-dialog {
+    max-height: calc(100vh - 20px);
+    max-height: calc(100dvh - 20px);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .amu-modal-content {
+    padding: 22px 18px 26px;
+  }
+
+  .amu-modal-title {
+    font-size: 1.35rem;
+  }
+
+  .amu-modal-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .amu-hero-starter-card {
+    padding: 22px 18px;
+  }
+}

@@ -30,7 +30,7 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/amu-redesign.css?v=3.4">
+  <link rel="stylesheet" href="css/amu-redesign.css?v=3.5">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W89MC73MGH"></script>
@@ -211,7 +211,7 @@
             </svg>
             (727) 255-8232
           </a>
-          <a href="#quote-section" class="amu-btn amu-btn-primary amu-btn-sm amu-btn-glow">Get a Free Quote</a>
+          <a href="#quote-modal" class="amu-btn amu-btn-primary amu-btn-sm amu-btn-glow" data-open-quote-modal>Get a Free Quote</a>
           <!-- Mobile Quick-Call Tap Action (Mobile Header) -->
           <a href="tel:7272558232" class="amu-nav-phone-mobile" aria-label="Call Dispatch (727) 255-8232">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -259,7 +259,7 @@
         </svg>
         Call Dispatch: (727) 255-8232
       </a>
-      <a href="#quote-section" class="amu-btn amu-btn-primary amu-btn-full amu-btn-glow">Get a Free Quote</a>
+      <a href="#quote-modal" class="amu-btn amu-btn-primary amu-btn-full amu-btn-glow" data-open-quote-modal>Get a Free Quote</a>
       <p style="font-size:0.75rem; color:#8E98A8; text-align:center; margin-top:8px; margin-bottom:0;">
         🇺🇸 Service-Disabled Veteran-Owned Small Business
       </p>
@@ -293,7 +293,7 @@
             </p>
 
             <div class="amu-hero-cta-group">
-              <a href="#quote-form-card" class="amu-btn amu-btn-primary amu-btn-lg amu-btn-glow">
+              <a href="#quote-modal" class="amu-btn amu-btn-primary amu-btn-lg amu-btn-glow" data-open-quote-modal>
                 Get My Free Quote
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -334,215 +334,62 @@
             </div>
           </div>
 
-          <!-- Hero Quote Form Column -->
-          <div class="amu-hero-form-card" id="quote-form-card">
+          <!-- Hero Quote Starter Card Column -->
+          <div class="amu-hero-starter-card" id="hero-quote-starter-card">
             <div class="amu-hero-form-header">
+              <div class="amu-starter-badge">
+                <span class="amu-starter-dot" aria-hidden="true"></span>
+                <span>Direct Nationwide Logistics</span>
+              </div>
               <h2 class="amu-hero-form-title">Request a Free Auto Transport Quote</h2>
-              <p class="amu-hero-form-subtitle">Complete vehicle &amp; route details below for real-time coordinator
-                review.</p>
+              <p class="amu-hero-form-subtitle">Direct door-to-door vehicle transport across all 48 continental states.</p>
             </div>
 
-            <!-- Form Multi-Step Progress Tracker -->
-            <div class="amu-form-progress" aria-hidden="true">
-              <div class="amu-progress-step active" data-step-indicator="1">
-                <span class="amu-step-num">1</span>
-                <span>Route &amp; Trailer</span>
+            <div class="amu-starter-form-preview">
+              <div class="amu-form-grid">
+                <div class="amu-form-group">
+                  <label class="amu-form-label" for="starter-pick-zip">
+                    Pickup ZIP / City
+                  </label>
+                  <input type="text" id="starter-pick-zip" class="amu-form-control"
+                    placeholder="e.g. 33702 (FL)" maxlength="20" autocomplete="postal-code">
+                </div>
+                <div class="amu-form-group">
+                  <label class="amu-form-label" for="starter-drop-zip">
+                    Delivery ZIP / City
+                  </label>
+                  <input type="text" id="starter-drop-zip" class="amu-form-control"
+                    placeholder="e.g. 75001 (TX)" maxlength="20" autocomplete="postal-code">
+                </div>
               </div>
-              <div class="amu-progress-step" data-step-indicator="2">
-                <span class="amu-step-num">2</span>
-                <span>Vehicle Details</span>
+
+              <div class="amu-form-group" style="margin-top: 10px; margin-bottom: 6px;">
+                <button type="button" class="amu-btn amu-btn-primary amu-btn-full amu-btn-glow" id="amu-hero-starter-btn" data-open-quote-modal style="height: 50px; font-size: 1.05rem;">
+                  Get My Free Quote &rarr;
+                </button>
               </div>
-              <div class="amu-progress-step" data-step-indicator="3">
-                <span class="amu-step-num">3</span>
-                <span>Contact &amp; Submit</span>
+
+              <div class="amu-starter-perks">
+                <div class="amu-starter-perk">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                  <span>Zero Upfront Payment &bull; Free Rate Calculation</span>
+                </div>
+                <div class="amu-starter-perk">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                  <span>100% Licensed &amp; Insured Carrier Network</span>
+                </div>
+                <div class="amu-starter-perk">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                  <span>Direct Door-to-Door Delivery Service</span>
+                </div>
               </div>
             </div>
-
-            <form id="amu-hero-quote-form" method="post" novalidate>
-              <!-- Anti-Spam Honeypot Field -->
-              <div class="amu-hp" aria-hidden="true">
-                <label for="amu-hp-website">Leave blank</label>
-                <input type="text" id="amu-hp-website" class="amu-hp-input" name="amu_website_field" tabindex="-1"
-                  autocomplete="off">
-              </div>
-
-              <!-- STEP 1: ROUTE & TRAILER TYPE -->
-              <div class="amu-form-step active" data-step="1">
-                <div class="amu-form-grid">
-                  <div class="amu-form-group">
-                    <label class="amu-form-label" for="hero-pick-zip">
-                      Pickup ZIP Code <span class="req">*</span>
-                    </label>
-                    <input type="text" id="hero-pick-zip" name="Pick-Up-ZIP-Code" class="amu-form-control"
-                      placeholder="e.g. 33702 (FL)" maxlength="10" inputmode="numeric" pattern="[0-9]*"
-                      autocomplete="postal-code" required>
-                  </div>
-                  <div class="amu-form-group">
-                    <label class="amu-form-label" for="hero-drop-zip">
-                      Delivery ZIP Code <span class="req">*</span>
-                    </label>
-                    <input type="text" id="hero-drop-zip" name="Drop-Off-Zip-Code" class="amu-form-control"
-                      placeholder="e.g. 75001 (TX)" maxlength="10" inputmode="numeric" pattern="[0-9]*"
-                      autocomplete="postal-code" required>
-                  </div>
-                </div>
-
-                <div class="amu-form-group">
-                  <label class="amu-form-label">
-                    Trailer Type <span class="req">*</span>
-                  </label>
-                  <div class="amu-radio-pills">
-                    <label class="amu-radio-pill">
-                      <input type="radio" name="Trailer-Type" value="Open" checked>
-                      <span class="amu-radio-pill-box">
-                        <span>🚛 Open Carrier (Standard)</span>
-                      </span>
-                    </label>
-                    <label class="amu-radio-pill">
-                      <input type="radio" name="Trailer-Type" value="Enclosed">
-                      <span class="amu-radio-pill-box">
-                        <span>🛡️ Enclosed Carrier (Protected)</span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                <div class="amu-form-group">
-                  <label class="amu-form-label" for="hero-date">
-                    Desired Pickup Date (Optional)
-                  </label>
-                  <input type="date" id="hero-date" name="Preferred Vehicle Delivery Date" class="amu-form-control">
-                </div>
-
-                <div class="amu-form-nav">
-                  <button type="button" class="amu-btn amu-btn-primary amu-btn-full amu-next-step-1">
-                    Next: Vehicle Information &rarr;
-                  </button>
-                </div>
-              </div>
-
-              <!-- STEP 2: VEHICLE DETAILS -->
-              <div class="amu-form-step" data-step="2">
-                <div class="amu-form-grid">
-                  <div class="amu-form-group">
-                    <label class="amu-form-label" for="hero-vehicle-year">
-                      Vehicle Year <span class="req">*</span>
-                    </label>
-                    <select id="hero-vehicle-year" name="Vehicle Make (Year)" class="amu-form-control amu-year-select"
-                      required>
-                      <option value="">Select Year</option>
-                    </select>
-                  </div>
-                  <div class="amu-form-group">
-                    <label class="amu-form-label" for="hero-vehicle-make">
-                      Vehicle Make <span class="req">*</span>
-                    </label>
-                    <input type="text" id="hero-vehicle-make" name="Vehicle-Make-Brand" class="amu-form-control"
-                      placeholder="e.g. Ford, Toyota, BMW" autocomplete="off" required>
-                  </div>
-                </div>
-
-                <div class="amu-form-grid">
-                  <div class="amu-form-group">
-                    <label class="amu-form-label" for="hero-vehicle-model">
-                      Vehicle Model <span class="req">*</span>
-                    </label>
-                    <input type="text" id="hero-vehicle-model" name="Vehicle-Model" class="amu-form-control"
-                      placeholder="e.g. F-150, Camry, X5" autocomplete="off" required>
-                  </div>
-                  <div class="amu-form-group">
-                    <label class="amu-form-label">
-                      Condition (Operable?) <span class="req">*</span>
-                    </label>
-                    <div class="amu-radio-pills">
-                      <label class="amu-radio-pill">
-                        <input type="radio" name="Operable" value="Yes" checked>
-                        <span class="amu-radio-pill-box">✓ Running</span>
-                      </label>
-                      <label class="amu-radio-pill">
-                        <input type="radio" name="Operable" value="No">
-                        <span class="amu-radio-pill-box">✕ Inoperable</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="amu-form-group">
-                  <label class="amu-form-label" for="hero-priority">
-                    Delivery Priority
-                  </label>
-                  <select id="hero-priority" name="Delivery-Priority" class="amu-form-control">
-                    <option value="Standard">Standard Schedule (Most Economical)</option>
-                    <option value="High">High Priority / Expedited</option>
-                    <option value="Flexible">Flexible Window</option>
-                  </select>
-                </div>
-
-                <div class="amu-form-nav">
-                  <button type="button" class="amu-btn amu-btn-outline-dark amu-prev-step-2">&larr; Back</button>
-                  <button type="button" class="amu-btn amu-btn-primary amu-next-step-2">Next: Contact Details
-                    &rarr;</button>
-                </div>
-              </div>
-
-              <!-- STEP 3: CONTACT & SUBMIT -->
-              <div class="amu-form-step" data-step="3">
-                <div class="amu-form-group">
-                  <label class="amu-form-label" for="hero-name">
-                    Full Name <span class="req">*</span>
-                  </label>
-                  <input type="text" id="hero-name" name="Full-Name-rq" class="amu-form-control"
-                    placeholder="Your full name" autocomplete="name" required>
-                </div>
-
-                <div class="amu-form-grid">
-                  <div class="amu-form-group">
-                    <label class="amu-form-label" for="hero-email">
-                      Email Address <span class="req">*</span>
-                    </label>
-                    <input type="email" id="hero-email" name="Email-rq" class="amu-form-control"
-                      placeholder="name@example.com" autocomplete="email" required>
-                  </div>
-                  <div class="amu-form-group">
-                    <label class="amu-form-label" for="hero-phone">
-                      Phone Number <span class="req">*</span>
-                    </label>
-                    <input type="tel" id="hero-phone" name="Phone-rq" class="amu-form-control"
-                      placeholder="(555) 000-0000" autocomplete="tel" inputmode="tel" required>
-                  </div>
-                </div>
-
-                <div class="amu-form-group">
-                  <label class="amu-form-label" for="hero-notes">
-                    Additional Shipment Notes (Optional)
-                  </label>
-                  <textarea id="hero-notes" name="Additional-Requests" class="amu-form-control" rows="2"
-                    placeholder="Lift kit, low clearance, pickup date notes, etc."></textarea>
-                </div>
-
-                <div class="amu-form-group">
-                  <label class="amu-checkbox-label" for="hero-sms-consent">
-                    <input type="checkbox" id="hero-sms-consent" name="sms_consent" required checked>
-                    <span>
-                      By checking this box, you agree to receive text messages about customer care &amp; delivery
-                      notifications from AutoMove United. Reply STOP to opt out, HELP for help. Message &amp; data rates
-                      may apply. Frequency varies. See our <a href="privacy-policy.html">Privacy Policy</a> and <a
-                        href="terms-and-conditions.html">Terms &amp; Conditions</a>.
-                    </span>
-                  </label>
-                </div>
-
-                <div class="amu-form-nav">
-                  <button type="button" class="amu-btn amu-btn-outline-dark amu-prev-step-3">&larr; Back</button>
-                  <button type="submit" class="amu-btn amu-btn-primary amu-submit-quote-btn">
-                    Submit Quote Request
-                  </button>
-                </div>
-              </div>
-
-              <!-- Real-time Submission Feedback Box -->
-              <div class="amu-form-status" role="alert" aria-live="polite"></div>
-            </form>
           </div>
 
         </div>
@@ -623,8 +470,7 @@
                   </svg> Full carrier cargo insurance verification</li>
               </ul>
               <div class="amu-service-footer">
-                <a href="request-quote.html" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full">Get Open Transport
-                  Quote</a>
+                <a href="#quote-modal" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full" data-open-quote-modal data-trailer="Open" data-quote-title="Get an Open Transport Quote">Get Open Transport Quote</a>
               </div>
             </div>
           </article>
@@ -654,8 +500,7 @@
                   </svg> Higher cargo insurance policy coverage</li>
               </ul>
               <div class="amu-service-footer">
-                <a href="request-quote.html" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full">Get Enclosed Transport
-                  Quote</a>
+                <a href="#quote-modal" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full" data-open-quote-modal data-trailer="Enclosed" data-quote-title="Get an Enclosed Transport Quote">Get Enclosed Transport Quote</a>
               </div>
             </div>
           </article>
@@ -685,8 +530,7 @@
                   </svg> Pre-delivery coordinator notification calls</li>
               </ul>
               <div class="amu-service-footer">
-                <a href="request-quote.html" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full">Request Door-to-Door
-                  Quote</a>
+                <a href="#quote-modal" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full" data-open-quote-modal data-quote-title="Request Door-to-Door Transport Quote">Request Door-to-Door Quote</a>
               </div>
             </div>
           </article>
@@ -716,8 +560,7 @@
                   </svg> Straightforward vehicle weight capacity matching</li>
               </ul>
               <div class="amu-service-footer">
-                <a href="request-quote.html" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full">Quote My Truck /
-                  SUV</a>
+                <a href="#quote-modal" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full" data-open-quote-modal data-quote-title="Quote My Truck / SUV Transport">Quote My Truck / SUV</a>
               </div>
             </div>
           </article>
@@ -747,8 +590,7 @@
                   </svg> Route-specific coordination upon request</li>
               </ul>
               <div class="amu-service-footer">
-                <a href="request-quote.html" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full">Inquire on Heavy
-                  Equipment</a>
+                <a href="#quote-modal" class="amu-btn amu-btn-navy amu-btn-sm amu-btn-full" data-open-quote-modal data-quote-title="Inquire on Heavy Equipment Transport">Inquire on Heavy Equipment</a>
               </div>
             </div>
           </article>
@@ -1011,8 +853,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 42px;" class="amu-reveal">
-          <a href="#quote-section" class="amu-btn amu-btn-primary amu-btn-lg amu-btn-glow">Start Step 1: Request Free
-            Quote</a>
+          <a href="#quote-modal" class="amu-btn amu-btn-primary amu-btn-lg amu-btn-glow" data-open-quote-modal>Start Step 1: Request Free Quote</a>
         </div>
       </div>
     </section>
@@ -1028,7 +869,7 @@
             <p class="amu-pricing-desc">
               Several factors can influence your auto transport quote. Here's what to keep in mind:
             </p>
-            <a href="#quote-form-card" class="amu-factor-cta-btn">
+            <a href="#quote-modal" class="amu-factor-cta-btn" data-open-quote-modal>
               Get My Quote <span class="amu-factor-arrow" aria-hidden="true">&rarr;</span>
             </a>
           </div>
@@ -1387,7 +1228,7 @@
               </div>
 
               <!-- Dynamic State Hover / Selection Callout Banner -->
-              <a href="#quote-section" class="amu-map-callout" id="amu-map-callout" aria-live="polite" style="text-decoration:none; display:block;">
+              <a href="#quote-modal" class="amu-map-callout" id="amu-map-callout" data-open-quote-modal aria-live="polite" style="text-decoration:none; display:block;">
                 <div class="amu-map-callout-primary">
                   <span class="amu-map-pin-icon" aria-hidden="true">📍</span>
                   <span class="amu-map-state-name" id="amu-map-state-name">Nationwide Auto Shipping</span>
@@ -1908,7 +1749,7 @@
                 <span class="amu-legend-item"><span class="amu-legend-dot amu-legend-hub"></span> Regional Dispatch Hubs</span>
               </div>
               
-              <a href="#quote-section" class="amu-why-float-card" style="text-decoration:none;">
+              <a href="#quote-modal" class="amu-why-float-card" data-open-quote-modal style="text-decoration:none;">
                 <div class="amu-float-icon">★</div>
                 <div>
                   <strong style="display:block; font-size:0.95rem; color:#FFFFFF;">Service-Disabled Veteran-Owned Small Business</strong>
@@ -2469,9 +2310,7 @@
             to coordinate your auto transport.
           </p>
           <div class="amu-final-cta-actions">
-            <a href="#quote-section" class="amu-btn amu-btn-primary amu-btn-lg amu-btn-glow">
-              Get a Free Quote Now
-            </a>
+            <a href="#quote-modal" class="amu-btn amu-btn-primary amu-btn-lg amu-btn-glow" data-open-quote-modal>Get a Free Quote Now</a>
             <a href="tel:7272558232" class="amu-btn amu-btn-outline amu-btn-lg">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -2644,8 +2483,232 @@
     </button>
   </div>
 
-  <!-- Scripts -->
-  <script src="js/amu-main.js?v=3.1"></script>
+  <!-- ==========================================================================
+       AutoMove United — One Reusable Dynamic "Get a Quote" Popup Modal
+       ========================================================================== -->
+  <div class="amu-modal" id="amu-quote-modal" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="amu-modal-quote-title">
+    <div class="amu-modal-backdrop" id="amu-modal-backdrop"></div>
+    <div class="amu-modal-dialog">
+      <button type="button" class="amu-modal-close" id="amu-modal-close" aria-label="Close quote modal">&times;</button>
+      <div class="amu-modal-content">
+        <div class="amu-modal-header">
+          <span class="amu-modal-eyebrow" id="amu-modal-eyebrow">FAST &bull; FREE &bull; NO OBLIGATION</span>
+          <h2 class="amu-modal-title" id="amu-modal-quote-title">Get a Free Quote</h2>
+          <p class="amu-modal-subtitle" id="amu-modal-quote-sub">Complete vehicle &amp; route details below for real-time coordinator review.</p>
+        </div>
+
+        <!-- Dynamic State Context Chip / Badge -->
+        <div class="amu-modal-state-badge" id="amu-modal-state-badge" style="display:none;">
+          <span>📍 Selected State: <strong id="amu-modal-state-name">New York</strong> (Pre-filled as Pickup location)</span>
+          <button type="button" class="amu-modal-state-clear" id="amu-modal-state-clear" aria-label="Clear selected state" title="Clear selected state">&times;</button>
+        </div>
+
+        <!-- Form Multi-Step Progress Tracker -->
+        <div class="amu-form-progress" aria-hidden="true">
+          <div class="amu-progress-step active" data-step-indicator="1">
+            <span class="amu-step-num">1</span>
+            <span>Route &amp; Trailer</span>
+          </div>
+          <div class="amu-progress-step" data-step-indicator="2">
+            <span class="amu-step-num">2</span>
+            <span>Vehicle Details</span>
+          </div>
+          <div class="amu-progress-step" data-step-indicator="3">
+            <span class="amu-step-num">3</span>
+            <span>Contact &amp; Submit</span>
+          </div>
+        </div>
+
+        <form id="amu-hero-quote-form" method="post" novalidate>
+              <!-- Anti-Spam Honeypot Field -->
+              <div class="amu-hp" aria-hidden="true">
+                <label for="amu-hp-website">Leave blank</label>
+                <input type="text" id="amu-hp-website" class="amu-hp-input" name="amu_website_field" tabindex="-1"
+                  autocomplete="off">
+              </div>
+
+              <!-- STEP 1: ROUTE & TRAILER TYPE -->
+              <div class="amu-form-step active" data-step="1">
+                <div class="amu-form-grid">
+                  <div class="amu-form-group">
+                    <label class="amu-form-label" for="hero-pick-zip">
+                      Pickup ZIP Code <span class="req">*</span>
+                    </label>
+                    <input type="text" id="hero-pick-zip" name="Pick-Up-ZIP-Code" class="amu-form-control"
+                      placeholder="e.g. 33702 (FL)" maxlength="10" inputmode="numeric" pattern="[0-9]*"
+                      autocomplete="postal-code" required>
+                  </div>
+                  <div class="amu-form-group">
+                    <label class="amu-form-label" for="hero-drop-zip">
+                      Delivery ZIP Code <span class="req">*</span>
+                    </label>
+                    <input type="text" id="hero-drop-zip" name="Drop-Off-Zip-Code" class="amu-form-control"
+                      placeholder="e.g. 75001 (TX)" maxlength="10" inputmode="numeric" pattern="[0-9]*"
+                      autocomplete="postal-code" required>
+                  </div>
+                </div>
+
+                <div class="amu-form-group">
+                  <label class="amu-form-label">
+                    Trailer Type <span class="req">*</span>
+                  </label>
+                  <div class="amu-radio-pills">
+                    <label class="amu-radio-pill">
+                      <input type="radio" name="Trailer-Type" value="Open" checked>
+                      <span class="amu-radio-pill-box">
+                        <span>🚛 Open Carrier (Standard)</span>
+                      </span>
+                    </label>
+                    <label class="amu-radio-pill">
+                      <input type="radio" name="Trailer-Type" value="Enclosed">
+                      <span class="amu-radio-pill-box">
+                        <span>🛡️ Enclosed Carrier (Protected)</span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="amu-form-group">
+                  <label class="amu-form-label" for="hero-date">
+                    Desired Pickup Date (Optional)
+                  </label>
+                  <input type="date" id="hero-date" name="Preferred Vehicle Delivery Date" class="amu-form-control">
+                </div>
+
+                <div class="amu-form-nav">
+                  <button type="button" class="amu-btn amu-btn-primary amu-btn-full amu-next-step-1">
+                    Next: Vehicle Information &rarr;
+                  </button>
+                </div>
+              </div>
+
+              <!-- STEP 2: VEHICLE DETAILS -->
+              <div class="amu-form-step" data-step="2">
+                <div class="amu-form-grid">
+                  <div class="amu-form-group">
+                    <label class="amu-form-label" for="hero-vehicle-year">
+                      Vehicle Year <span class="req">*</span>
+                    </label>
+                    <select id="hero-vehicle-year" name="Vehicle Make (Year)" class="amu-form-control amu-year-select"
+                      required>
+                      <option value="">Select Year</option>
+                    </select>
+                  </div>
+                  <div class="amu-form-group">
+                    <label class="amu-form-label" for="hero-vehicle-make">
+                      Vehicle Make <span class="req">*</span>
+                    </label>
+                    <input type="text" id="hero-vehicle-make" name="Vehicle-Make-Brand" class="amu-form-control"
+                      placeholder="e.g. Ford, Toyota, BMW" autocomplete="off" required>
+                  </div>
+                </div>
+
+                <div class="amu-form-grid">
+                  <div class="amu-form-group">
+                    <label class="amu-form-label" for="hero-vehicle-model">
+                      Vehicle Model <span class="req">*</span>
+                    </label>
+                    <input type="text" id="hero-vehicle-model" name="Vehicle-Model" class="amu-form-control"
+                      placeholder="e.g. F-150, Camry, X5" autocomplete="off" required>
+                  </div>
+                  <div class="amu-form-group">
+                    <label class="amu-form-label">
+                      Condition (Operable?) <span class="req">*</span>
+                    </label>
+                    <div class="amu-radio-pills">
+                      <label class="amu-radio-pill">
+                        <input type="radio" name="Operable" value="Yes" checked>
+                        <span class="amu-radio-pill-box">✓ Running</span>
+                      </label>
+                      <label class="amu-radio-pill">
+                        <input type="radio" name="Operable" value="No">
+                        <span class="amu-radio-pill-box">✕ Inoperable</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="amu-form-group">
+                  <label class="amu-form-label" for="hero-priority">
+                    Delivery Priority
+                  </label>
+                  <select id="hero-priority" name="Delivery-Priority" class="amu-form-control">
+                    <option value="Standard">Standard Schedule (Most Economical)</option>
+                    <option value="High">High Priority / Expedited</option>
+                    <option value="Flexible">Flexible Window</option>
+                  </select>
+                </div>
+
+                <div class="amu-form-nav">
+                  <button type="button" class="amu-btn amu-btn-outline-dark amu-prev-step-2">&larr; Back</button>
+                  <button type="button" class="amu-btn amu-btn-primary amu-next-step-2">Next: Contact Details
+                    &rarr;</button>
+                </div>
+              </div>
+
+              <!-- STEP 3: CONTACT & SUBMIT -->
+              <div class="amu-form-step" data-step="3">
+                <div class="amu-form-group">
+                  <label class="amu-form-label" for="hero-name">
+                    Full Name <span class="req">*</span>
+                  </label>
+                  <input type="text" id="hero-name" name="Full-Name-rq" class="amu-form-control"
+                    placeholder="Your full name" autocomplete="name" required>
+                </div>
+
+                <div class="amu-form-grid">
+                  <div class="amu-form-group">
+                    <label class="amu-form-label" for="hero-email">
+                      Email Address <span class="req">*</span>
+                    </label>
+                    <input type="email" id="hero-email" name="Email-rq" class="amu-form-control"
+                      placeholder="name@example.com" autocomplete="email" required>
+                  </div>
+                  <div class="amu-form-group">
+                    <label class="amu-form-label" for="hero-phone">
+                      Phone Number <span class="req">*</span>
+                    </label>
+                    <input type="tel" id="hero-phone" name="Phone-rq" class="amu-form-control"
+                      placeholder="(555) 000-0000" autocomplete="tel" inputmode="tel" required>
+                  </div>
+                </div>
+
+                <div class="amu-form-group">
+                  <label class="amu-form-label" for="hero-notes">
+                    Additional Shipment Notes (Optional)
+                  </label>
+                  <textarea id="hero-notes" name="Additional-Requests" class="amu-form-control" rows="2"
+                    placeholder="Lift kit, low clearance, pickup date notes, etc."></textarea>
+                </div>
+
+                <div class="amu-form-group">
+                  <label class="amu-checkbox-label" for="hero-sms-consent">
+                    <input type="checkbox" id="hero-sms-consent" name="sms_consent" required checked>
+                    <span>
+                      By checking this box, you agree to receive text messages about customer care &amp; delivery
+                      notifications from AutoMove United. Reply STOP to opt out, HELP for help. Message &amp; data rates
+                      may apply. Frequency varies. See our <a href="privacy-policy.html">Privacy Policy</a> and <a
+                        href="terms-and-conditions.html">Terms &amp; Conditions</a>.
+                    </span>
+                  </label>
+                </div>
+
+                <div class="amu-form-nav">
+                  <button type="button" class="amu-btn amu-btn-outline-dark amu-prev-step-3">&larr; Back</button>
+                  <button type="submit" class="amu-btn amu-btn-primary amu-submit-quote-btn">
+                    Submit Quote Request
+                  </button>
+                </div>
+              </div>
+
+              <!-- Real-time Submission Feedback Box -->
+              <div class="amu-form-status" role="alert" aria-live="polite"></div>
+            </form>
+      </div>
+    </div>
+  </div>
+  <script src="js/amu-main.js?v=3.5"></script>
 
   <!-- Live Chat (Tawk.to) -->
   <script type="text/javascript">

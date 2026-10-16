@@ -35,6 +35,7 @@
     initBackToTop();
     initChatbot();
     initUsaShippingMap();
+    initQuoteModal();
   });
 
   /* ==========================================================================
@@ -173,6 +174,24 @@
   function initHeroQuoteForm() {
     const form = document.getElementById('amu-hero-quote-form');
     if (!form) return;
+    // Global reset method for modal reuse
+    window.resetQuoteForm = function () {
+      updateProgress(1);
+      form.querySelectorAll('.amu-form-step').forEach(function (el) {
+        el.style.display = '';
+      });
+      const prog = form.querySelector('.amu-form-progress');
+      if (prog) prog.style.display = '';
+      if (statusBox) {
+        statusBox.className = 'amu-form-status';
+        statusBox.innerHTML = '';
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Quote Request';
+      }
+    };
+
 
     let currentStep = 1;
     const totalSteps = 3;
@@ -638,23 +657,18 @@
     routeBtns.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
-        const pick = btn.getAttribute('data-route-pickup');
-        const drop = btn.getAttribute('data-route-dropoff');
+        const pick = btn.getAttribute('data-route-pickup') || '';
+        const drop = btn.getAttribute('data-route-dropoff') || '';
 
-        const heroForm = document.getElementById('amu-hero-quote-form');
-        if (heroForm) {
-          const pickField = heroForm.querySelector('[name="Pick-Up-ZIP-Code"]');
-          const dropField = heroForm.querySelector('[name="Drop-Off-Zip-Code"]');
-          if (pickField && dropField) {
-            pickField.value = pick;
-            dropField.value = drop;
-            heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            pickField.focus();
-            return;
-          }
+        if (typeof window.openQuoteModal === 'function') {
+          window.openQuoteModal({
+            pickupZip: pick,
+            dropoffZip: drop,
+            title: 'Get Quote on this Route'
+          });
+          return;
         }
 
-        // Otherwise send to request-quote.html
         sessionStorage.setItem('pickUpZip', pick);
         sessionStorage.setItem('dropOffZip', drop);
         window.location.href = 'request-quote.html';
@@ -1096,26 +1110,19 @@
     }
 
     function handleStateClick(e, stateEl) {
-      e.preventDefault();
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       const stateName = stateEl.getAttribute('data-state') || '';
       const stateCode = stateEl.getAttribute('data-code') || '';
 
-      // Find existing quote section or form
-      const quoteSection = document.getElementById('quote-section');
-      const quoteFormCard = document.getElementById('quote-form-card') || quoteSection;
-
-      if (quoteFormCard) {
-        quoteFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        // Focus pickup ZIP field if available
-        const pickupField = document.querySelector('#amu-hero-quote-form [name="Pick-Up-ZIP-Code"]');
-        if (pickupField) {
-          setTimeout(function () {
-            pickupField.focus();
-          }, 600);
-        }
+      if (typeof window.openQuoteModal === 'function') {
+        window.openQuoteModal({
+          state: stateName,
+          code: stateCode
+        });
       } else {
-        // Fallback navigation to existing quote page
         window.location.href = 'request-quote.html';
       }
     }
@@ -1169,14 +1176,19 @@
 
     if (calloutEl) {
       calloutEl.addEventListener('click', function (e) {
-        const quoteSection = document.getElementById('quote-section');
-        if (quoteSection) {
-          e.preventDefault();
-          quoteSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          const pickupField = document.querySelector('#amu-hero-quote-form [name="Pick-Up-ZIP-Code"]');
-          if (pickupField) {
-            setTimeout(function () { pickupField.focus(); }, 600);
+        e.preventDefault();
+        const currentState = stateNameEl ? stateNameEl.textContent.trim() : '';
+        if (currentState && !currentState.includes('Nationwide')) {
+          const match = currentState.match(/^([^(]+)(?:\s*\(([A-Z]{2})\))?/i);
+          const name = match ? match[1].trim() : currentState;
+          const code = match && match[2] ? match[2].trim() : '';
+          if (typeof window.openQuoteModal === 'function') {
+            window.openQuoteModal({ state: name, code: code });
+            return;
           }
+        }
+        if (typeof window.openQuoteModal === 'function') {
+          window.openQuoteModal();
         }
       });
     }
@@ -1388,6 +1400,281 @@
         });
       }, { threshold: 0.05 });
       observer.observe(mapCard);
+    }
+  }
+
+  /* ==========================================================================
+     17. Reusable Dynamic "Get a Quote" Modal & Universal Quote Triggers
+     ========================================================================== */
+  const US_STATES = {
+    AL: { name: 'Alabama', zip: '35203' },
+    AK: { name: 'Alaska', zip: '99501' },
+    AZ: { name: 'Arizona', zip: '85001' },
+    AR: { name: 'Arkansas', zip: '72201' },
+    CA: { name: 'California', zip: '90001' },
+    CO: { name: 'Colorado', zip: '80202' },
+    CT: { name: 'Connecticut', zip: '06101' },
+    DE: { name: 'Delaware', zip: '19901' },
+    FL: { name: 'Florida', zip: '33702' },
+    GA: { name: 'Georgia', zip: '30301' },
+    HI: { name: 'Hawaii', zip: '96801' },
+    ID: { name: 'Idaho', zip: '83702' },
+    IL: { name: 'Illinois', zip: '60601' },
+    IN: { name: 'Indiana', zip: '46201' },
+    IA: { name: 'Iowa', zip: '50301' },
+    KS: { name: 'Kansas', zip: '67201' },
+    KY: { name: 'Kentucky', zip: '40201' },
+    LA: { name: 'Louisiana', zip: '70112' },
+    ME: { name: 'Maine', zip: '04101' },
+    MD: { name: 'Maryland', zip: '21201' },
+    MA: { name: 'Massachusetts', zip: '02108' },
+    MI: { name: 'Michigan', zip: '48201' },
+    MN: { name: 'Minnesota', zip: '55401' },
+    MS: { name: 'Mississippi', zip: '39201' },
+    MO: { name: 'Missouri', zip: '63101' },
+    MT: { name: 'Montana', zip: '59601' },
+    NE: { name: 'Nebraska', zip: '68102' },
+    NV: { name: 'Nevada', zip: '89101' },
+    NH: { name: 'New Hampshire', zip: '03301' },
+    NJ: { name: 'New Jersey', zip: '07101' },
+    NM: { name: 'New Mexico', zip: '87101' },
+    NY: { name: 'New York', zip: '10001' },
+    NC: { name: 'North Carolina', zip: '27601' },
+    ND: { name: 'North Dakota', zip: '58501' },
+    OH: { name: 'Ohio', zip: '43215' },
+    OK: { name: 'Oklahoma', zip: '73102' },
+    OR: { name: 'Oregon', zip: '97201' },
+    PA: { name: 'Pennsylvania', zip: '19104' },
+    RI: { name: 'Rhode Island', zip: '02903' },
+    SC: { name: 'South Carolina', zip: '29201' },
+    SD: { name: 'South Dakota', zip: '57104' },
+    TN: { name: 'Tennessee', zip: '37203' },
+    TX: { name: 'Texas', zip: '75001' },
+    UT: { name: 'Utah', zip: '84101' },
+    VT: { name: 'Vermont', zip: '05602' },
+    VA: { name: 'Virginia', zip: '23219' },
+    WA: { name: 'Washington', zip: '98101' },
+    WV: { name: 'West Virginia', zip: '25301' },
+    WI: { name: 'Wisconsin', zip: '53202' },
+    WY: { name: 'Wyoming', zip: '82001' }
+  };
+
+  function resolveState(input) {
+    if (!input) return null;
+    const clean = input.trim().toUpperCase();
+    if (US_STATES[clean]) {
+      return { code: clean, name: US_STATES[clean].name, zip: US_STATES[clean].zip };
+    }
+    for (const code in US_STATES) {
+      if (US_STATES[code].name.toUpperCase() === clean) {
+        return { code: code, name: US_STATES[code].name, zip: US_STATES[code].zip };
+      }
+    }
+    return { code: '', name: input.trim(), zip: '' };
+  }
+
+  function initQuoteModal() {
+    const modal = document.getElementById('amu-quote-modal');
+    if (!modal) return;
+
+    const dialog = modal.querySelector('.amu-modal-dialog');
+    const closeBtn = document.getElementById('amu-modal-close');
+    const backdrop = document.getElementById('amu-modal-backdrop');
+    const titleEl = document.getElementById('amu-modal-quote-title');
+    const subEl = document.getElementById('amu-modal-quote-sub');
+    const stateBadgeEl = document.getElementById('amu-modal-state-badge');
+    const stateNameEl = document.getElementById('amu-modal-state-name');
+    const stateClearBtn = document.getElementById('amu-modal-state-clear');
+    const form = document.getElementById('amu-hero-quote-form');
+
+    function openQuoteModal(options) {
+      let stateName = '';
+      let stateCode = '';
+      let pickupZip = '';
+      let dropoffZip = '';
+      let trailerType = '';
+      let customTitle = '';
+
+      if (typeof options === 'string') {
+        stateName = options;
+      } else if (options && typeof options === 'object') {
+        stateName = options.state || '';
+        stateCode = options.code || '';
+        pickupZip = options.pickupZip || '';
+        dropoffZip = options.dropoffZip || '';
+        trailerType = options.trailerType || '';
+        customTitle = options.title || '';
+      }
+
+      // Reset form progress and view state
+      if (typeof window.resetQuoteForm === 'function') {
+        window.resetQuoteForm();
+      }
+
+      // Handle State Context
+      if (stateName || stateCode) {
+        const resolved = resolveState(stateCode || stateName);
+        const displayName = resolved ? resolved.name : (stateName || stateCode);
+        const defaultZip = resolved ? resolved.zip : '';
+
+        if (titleEl) {
+          titleEl.textContent = 'Get a Quote for ' + displayName;
+        }
+        if (subEl) {
+          subEl.textContent = 'Direct nationwide auto transport to or from ' + displayName + '. Rapid coordinator dispatch & competitive carrier rates.';
+        }
+        if (stateBadgeEl && stateNameEl) {
+          stateNameEl.textContent = displayName;
+          stateBadgeEl.style.display = 'flex';
+        }
+
+        if (form) {
+          const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+          if (pickInput) {
+            pickInput.value = pickupZip || defaultZip;
+          }
+        }
+      } else {
+        // Generic / Default Title
+        if (titleEl) {
+          titleEl.textContent = customTitle || 'Get a Free Quote';
+        }
+        if (subEl) {
+          subEl.textContent = 'Complete vehicle & route details below for real-time coordinator review.';
+        }
+        if (stateBadgeEl) {
+          stateBadgeEl.style.display = 'none';
+        }
+        if (form) {
+          const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+          if (pickInput) pickInput.value = pickupZip || '';
+        }
+      }
+
+      // Handle Route Drop-off ZIP
+      if (form) {
+        const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
+        if (dropInput) dropInput.value = dropoffZip || '';
+      }
+
+      // Handle Trailer Type
+      if (form && trailerType) {
+        const trailerRadio = form.querySelector(`input[name="Trailer-Type"][value="${trailerType}"]`);
+        if (trailerRadio) trailerRadio.checked = true;
+      }
+
+      // Open Modal
+      modal.classList.add('is-active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('amu-modal-open');
+
+      // Autofocus
+      setTimeout(function () {
+        if (!form) return;
+        const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+        const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
+        if (pickInput && !pickInput.value.trim()) {
+          pickInput.focus();
+        } else if (dropInput) {
+          dropInput.focus();
+        }
+      }, 150);
+    }
+
+    function closeQuoteModal() {
+      modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('amu-modal-open');
+    }
+
+    // Expose globally for map, routes, and external callers
+    window.openQuoteModal = openQuoteModal;
+    window.closeQuoteModal = closeQuoteModal;
+
+    // Close triggers
+    if (closeBtn) closeBtn.addEventListener('click', closeQuoteModal);
+    if (backdrop) backdrop.addEventListener('click', closeQuoteModal);
+
+    // Prevent backdrop close when clicking inside dialog
+    if (dialog) {
+      dialog.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+    }
+
+    // Escape key listener
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+        closeQuoteModal();
+      }
+    });
+
+    // Clear state context chip
+    if (stateClearBtn) {
+      stateClearBtn.addEventListener('click', function () {
+        if (stateBadgeEl) stateBadgeEl.style.display = 'none';
+        if (titleEl) titleEl.textContent = 'Get a Free Quote';
+        if (subEl) subEl.textContent = 'Complete vehicle & route details below for real-time coordinator review.';
+        if (form) {
+          const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+          if (pickInput) {
+            pickInput.value = '';
+            pickInput.focus();
+          }
+        }
+      });
+    }
+
+    // Hero Starter Card Button
+    const starterBtn = document.getElementById('amu-hero-starter-btn');
+    if (starterBtn) {
+      starterBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const pick = document.getElementById('starter-pick-zip')?.value.trim() || '';
+        const drop = document.getElementById('starter-drop-zip')?.value.trim() || '';
+        openQuoteModal({
+          pickupZip: pick,
+          dropoffZip: drop,
+          title: 'Get a Free Quote'
+        });
+      });
+    }
+
+    // Universal Trigger Binding: All "Get a Quote" buttons & links
+    const quoteTriggers = document.querySelectorAll(
+      '[data-open-quote-modal], a[href="#quote-modal"], a[href="#quote-section"], a[href="#quote-form-card"]'
+    );
+
+    quoteTriggers.forEach(function (trigger) {
+      if (trigger.id === 'amu-hero-starter-btn') return; // Handled above
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Close mobile drawer if currently open
+        const mobileNav = document.querySelector('.amu-mobile-nav, .amu-mobile-drawer');
+        const mobileBackdrop = document.querySelector('.amu-mobile-backdrop');
+        if (mobileNav && mobileNav.classList.contains('open')) {
+          mobileNav.classList.remove('open');
+        }
+        if (mobileBackdrop && mobileBackdrop.classList.contains('open')) {
+          mobileBackdrop.classList.remove('open');
+        }
+
+        const trailer = trigger.getAttribute('data-trailer') || '';
+        const title = trigger.getAttribute('data-quote-title') || '';
+        openQuoteModal({
+          trailerType: trailer,
+          title: title
+        });
+      });
+    });
+
+    // Chatbot Quote button integration
+    const chatQuoteBtn = document.querySelector('[data-chat-answer="quote"]');
+    if (chatQuoteBtn) {
+      chatQuoteBtn.addEventListener('click', function () {
+        openQuoteModal();
+      });
     }
   }
 
