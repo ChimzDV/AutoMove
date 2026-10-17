@@ -1266,9 +1266,13 @@
       g.setAttribute('pointer-events', 'none');
       g.setAttribute('opacity', '0');
 
+      // Randomly select between the 3 high-detail commercial car carrier fleet variants
+      const truckVariants = ['#amu-car-carrier-truck', '#amu-car-carrier-truck-2', '#amu-car-carrier-truck-3'];
+      const chosenVariant = truckVariants[Math.floor(Math.random() * truckVariants.length)];
+
       const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-      use.setAttribute('href', '#amu-car-carrier-truck');
-      use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#amu-car-carrier-truck');
+      use.setAttribute('href', chosenVariant);
+      use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', chosenVariant);
       g.appendChild(use);
       trucksLayer.appendChild(g);
 
@@ -1314,7 +1318,14 @@
         angle = Math.atan2(pt.y - ptPrev.y, pt.x - ptPrev.x) * (180 / Math.PI);
       }
 
-      truck.el.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ',' + pt.y.toFixed(2) + ') rotate(' + angle.toFixed(2) + ')');
+      if (Math.abs(angle) > 90) {
+        // Westbound / leftward travel: flip horizontally so wheels stay grounded on the route while cab faces forward
+        const normAngle = angle > 0 ? angle - 180 : angle + 180;
+        truck.el.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ',' + pt.y.toFixed(2) + ') rotate(' + normAngle.toFixed(2) + ') scale(-1, 1)');
+      } else {
+        // Eastbound / rightward travel: natural orientation
+        truck.el.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ',' + pt.y.toFixed(2) + ') rotate(' + angle.toFixed(2) + ')');
+      }
       truck.el.setAttribute('opacity', opacity.toFixed(3));
       return true;
     }
