@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 56" fill="none">
+  <!-- Super Dispatch Official Pin Icon -->
+  <g id="super-dispatch-mark">
+    <!-- Outer pin loop: starts from bottom-right tail, sweeps up over top, down left and tapers into point -->
+    <path d="M 23 50.5 C 13.5 45 4.5 35 4.5 24 C 4.5 12.1 14.1 2.5 26 2.5 C 37.9 2.5 47.5 12.1 47.5 24 C 47.5 35 34 46.5 27 51.5" 
+          stroke="#EB4335" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Inner concentric spiral contour -->
+    <path d="M 13.5 24 C 13.5 17.1 19.1 11.5 26 11.5 C 32.9 11.5 38.5 17.1 38.5 24 C 38.5 29.5 32 37 25.5 42" 
+          stroke="#EB4335" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Center core dot -->
+    <circle cx="26" cy="24" r="4.2" fill="#EB4335"/>
+  </g>
+  <!-- SuperDispatch Wordmark -->
+  <text x="60" y="37.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Plus Jakarta Sans', 'Inter', sans-serif" font-size="28" font-weight="700" fill="#1E293B" letter-spacing="-0.5px">Super<tspan font-weight="800">Dispatch</tspan></text>
+  <!-- TM Small Mark -->
+  <text x="242" y="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8" font-weight="700" fill="#1E293B">TM</text>
+</svg>
