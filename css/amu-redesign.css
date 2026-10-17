@@ -876,29 +876,23 @@ body:not(:has(.amu-hero)):not(:has(.amu-page-hero)) .amu-header {
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
 }
 
-.amu-hero-cta-group {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 65px;
-}
-
 .amu-hero-trust-bar {
   display: flex;
   align-items: center;
-  gap: 18px;
-  flex-wrap: nowrap;
-  padding-top: 2px;
-  border-top: none;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  margin-bottom: 6px;
+  width: 100%;
 }
 
 .amu-hero-trust-item {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   color: #FFFFFF;
-  font-size: 0.85rem;
+  font-size: 0.96rem;
   font-weight: 600;
   white-space: nowrap;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
@@ -906,8 +900,8 @@ body:not(:has(.amu-hero)):not(:has(.amu-page-hero)) .amu-header {
 
 .amu-hero-trust-item svg {
   color: #2F8CFF;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
 }
@@ -918,38 +912,42 @@ body:not(:has(.amu-hero)):not(:has(.amu-page-hero)) .amu-header {
 .amu-hero-form-card {
   background: var(--amu-white);
   border-radius: var(--radius-lg);
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
+  padding: 26px 26px 22px;
+  box-shadow: 0 20px 48px -12px rgba(10, 25, 47, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.25);
   color: var(--amu-text-main);
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .amu-hero-form-header {
-  margin-bottom: 22px;
+  margin-bottom: 14px;
   text-align: left;
 }
 
 .amu-hero-form-title {
-  font-size: 1.55rem;
+  font-size: 1.42rem;
   font-weight: 700;
   color: var(--amu-navy);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  line-height: 1.25;
 }
 
 .amu-hero-form-subtitle {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   color: var(--amu-text-muted);
+  line-height: 1.4;
 }
 
 .amu-form-progress {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
   position: relative;
   background: var(--amu-grey-bg);
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: var(--radius-sm);
 }
 
@@ -3166,7 +3164,7 @@ textarea.amu-form-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 28px;
+  padding: 8px 16px;
   background: var(--amu-white);
   border: 1px solid var(--amu-border);
   border-radius: var(--radius-md);
@@ -3175,6 +3173,7 @@ textarea.amu-form-control {
   height: 88px;
   min-width: 200px;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .amu-partner-item:hover {
@@ -3185,12 +3184,19 @@ textarea.amu-form-control {
 }
 
 .amu-partner-item img {
-  max-height: 48px;
-  max-width: 155px;
+  max-height: 66px;
+  max-width: 172px;
   width: auto;
   height: auto;
   object-fit: contain;
   display: block;
+  transform: scale(1.08);
+  transform-origin: center center;
+  transition: transform var(--transition-fast);
+}
+
+.amu-partner-item:hover img {
+  transform: scale(1.12);
 }
 
 @media (max-width: 768px) {
@@ -3211,12 +3217,13 @@ textarea.amu-form-control {
   .amu-partner-item {
     height: 76px;
     min-width: 160px;
-    padding: 10px 20px;
+    padding: 6px 12px;
   }
 
   .amu-partner-item img {
-    max-height: 40px;
-    max-width: 125px;
+    max-height: 56px;
+    max-width: 142px;
+    transform: scale(1.06);
   }
 }
 
@@ -3507,15 +3514,21 @@ textarea.amu-form-control {
   }
 
   .amu-hero-trust-bar {
-    padding-top: 14px;
-    gap: 10px 14px;
+    padding-top: 6px;
+    gap: 10px 18px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 18px;
   }
 
   .amu-hero-trust-item {
-    font-size: 0.78rem;
-    gap: 5px;
+    font-size: 0.86rem;
+    gap: 6px;
+  }
+
+  .amu-hero-trust-item svg {
+    width: 20px;
+    height: 20px;
   }
 
   .amu-hero-form-card {
@@ -6519,7 +6532,36 @@ body.amu-modal-open {
     font-size: 0.85rem;
   }
 
-  .amu-hero-starter-card {
-    padding: 22px 18px;
+  .amu-hero-starter-card,
+  .amu-hero-form-card {
+    padding: 20px 16px 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .amu-hero-form-title {
+    font-size: 1.25rem;
+  }
+
+  .amu-hero-form-subtitle {
+    font-size: 0.84rem;
+  }
+
+  .amu-form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .amu-form-progress {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .amu-progress-step span:not(.amu-step-num) {
+    font-size: 0.72rem;
+  }
+
+  .amu-radio-pills {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 }

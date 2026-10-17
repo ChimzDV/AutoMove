@@ -174,13 +174,25 @@
   function initHeroQuoteForm() {
     const form = document.getElementById('amu-hero-quote-form');
     if (!form) return;
-    // Global reset method for modal reuse
+
+    function getProgressBar() {
+      return form.querySelector('.amu-form-progress') ||
+        form.closest('.amu-hero-form-card, .amu-quote-card, .amu-modal-content')?.querySelector('.amu-form-progress') ||
+        document.querySelector('.amu-form-progress');
+    }
+
+    function getProgressSteps() {
+      const bar = getProgressBar();
+      return bar ? bar.querySelectorAll('.amu-progress-step') : form.querySelectorAll('.amu-progress-step');
+    }
+
+    // Global reset method for form reuse
     window.resetQuoteForm = function () {
       updateProgress(1);
       form.querySelectorAll('.amu-form-step').forEach(function (el) {
         el.style.display = '';
       });
-      const prog = form.querySelector('.amu-form-progress');
+      const prog = getProgressBar();
       if (prog) prog.style.display = '';
       if (statusBox) {
         statusBox.className = 'amu-form-status';
@@ -191,7 +203,6 @@
         submitBtn.textContent = 'Submit Quote Request';
       }
     };
-
 
     let currentStep = 1;
     const totalSteps = 3;
@@ -215,7 +226,7 @@
       const activeStep = form.querySelector(`[data-step="${step}"]`);
       if (activeStep) activeStep.classList.add('active');
 
-      form.querySelectorAll('.amu-progress-step').forEach(function (el, idx) {
+      getProgressSteps().forEach(function (el, idx) {
         el.classList.remove('active', 'completed');
         if (idx + 1 === step) {
           el.classList.add('active');
@@ -355,7 +366,8 @@
               <br><br>Need immediate assistance? Call us directly at <a href="tel:7272558232" style="font-weight:700;color:#065F46;text-decoration:underline;">(727) 255-8232</a>.
             `;
             form.querySelectorAll('.amu-form-step').forEach(el => el.style.display = 'none');
-            form.querySelector('.amu-form-progress').style.display = 'none';
+            const prog = getProgressBar();
+            if (prog) prog.style.display = 'none';
             form.reset();
           } else {
             throw new Error('Endpoint returned error status');
@@ -1486,9 +1498,10 @@
 
   function initQuoteModal() {
     const modal = document.getElementById('amu-quote-modal');
-    if (!modal) return;
+    const heroForm = document.getElementById('amu-hero-quote-form');
+    if (!modal && !heroForm) return;
 
-    const dialog = modal.querySelector('.amu-modal-dialog');
+    const dialog = modal ? modal.querySelector('.amu-modal-dialog') : null;
     const closeBtn = document.getElementById('amu-modal-close');
     const backdrop = document.getElementById('amu-modal-backdrop');
     const titleEl = document.getElementById('amu-modal-quote-title');
@@ -1496,7 +1509,7 @@
     const stateBadgeEl = document.getElementById('amu-modal-state-badge');
     const stateNameEl = document.getElementById('amu-modal-state-name');
     const stateClearBtn = document.getElementById('amu-modal-state-clear');
-    const form = document.getElementById('amu-hero-quote-form');
+    const form = heroForm || (modal ? modal.querySelector('form') : null);
 
     function openQuoteModal(options) {
       let stateName = '';
@@ -1517,85 +1530,148 @@
         customTitle = options.title || '';
       }
 
-      // Reset form progress and view state
-      if (typeof window.resetQuoteForm === 'function') {
-        window.resetQuoteForm();
-      }
-
-      // Handle State Context
-      if (stateName || stateCode) {
-        const resolved = resolveState(stateCode || stateName);
-        const displayName = resolved ? resolved.name : (stateName || stateCode);
-        const defaultZip = resolved ? resolved.zip : '';
-
-        if (titleEl) {
-          titleEl.textContent = 'Get a Quote for ' + displayName;
-        }
-        if (subEl) {
-          subEl.textContent = 'Direct nationwide auto transport to or from ' + displayName + '. Rapid coordinator dispatch & competitive carrier rates.';
-        }
-        if (stateBadgeEl && stateNameEl) {
-          stateNameEl.textContent = displayName;
-          stateBadgeEl.style.display = 'flex';
-        }
-
-        if (form) {
-          const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
-          if (pickInput) {
-            pickInput.value = pickupZip || defaultZip;
+      // If modal is not present (or we have direct hero quote form on homepage)
+      if (!modal && form) {
+        if (typeof window.resetQuoteForm === 'function') {
+          const statusBox = form.querySelector('.amu-form-status');
+          if (statusBox && statusBox.classList.contains('success')) {
+            window.resetQuoteForm();
           }
         }
-      } else {
-        // Generic / Default Title
-        if (titleEl) {
-          titleEl.textContent = customTitle || 'Get a Free Quote';
-        }
-        if (subEl) {
-          subEl.textContent = 'Complete vehicle & route details below for real-time coordinator review.';
-        }
-        if (stateBadgeEl) {
-          stateBadgeEl.style.display = 'none';
-        }
-        if (form) {
+
+        if (stateName || stateCode) {
+          const resolved = resolveState(stateCode || stateName);
+          const displayName = resolved ? resolved.name : (stateName || stateCode);
+          const defaultZip = resolved ? resolved.zip : '';
+
+          if (stateBadgeEl && stateNameEl) {
+            stateNameEl.textContent = displayName;
+            stateBadgeEl.style.display = 'flex';
+          }
           const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
-          if (pickInput) pickInput.value = pickupZip || '';
+          if (pickInput) {
+            pickInput.value = pickupZip || defaultZip || displayName;
+          }
+        } else {
+          if (stateBadgeEl) stateBadgeEl.style.display = 'none';
+          if (pickupZip) {
+            const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+            if (pickInput) pickInput.value = pickupZip;
+          }
         }
-      }
 
-      // Handle Route Drop-off ZIP
-      if (form) {
-        const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
-        if (dropInput) dropInput.value = dropoffZip || '';
-      }
-
-      // Handle Trailer Type
-      if (form && trailerType) {
-        const trailerRadio = form.querySelector(`input[name="Trailer-Type"][value="${trailerType}"]`);
-        if (trailerRadio) trailerRadio.checked = true;
-      }
-
-      // Open Modal
-      modal.classList.add('is-active');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('amu-modal-open');
-
-      // Autofocus
-      setTimeout(function () {
-        if (!form) return;
-        const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
-        const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
-        if (pickInput && !pickInput.value.trim()) {
-          pickInput.focus();
-        } else if (dropInput) {
-          dropInput.focus();
+        if (dropoffZip) {
+          const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
+          if (dropInput) dropInput.value = dropoffZip;
         }
-      }, 150);
+
+        if (trailerType) {
+          const trailerRadio = form.querySelector(`input[name="Trailer-Type"][value="${trailerType}"]`);
+          if (trailerRadio) trailerRadio.checked = true;
+        }
+
+        const heroCard = document.getElementById('hero-quote-card') || form;
+        heroCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        setTimeout(function () {
+          const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+          const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
+          if (pickInput && !pickInput.value.trim()) {
+            pickInput.focus();
+          } else if (dropInput && !dropInput.value.trim()) {
+            dropInput.focus();
+          } else if (pickInput) {
+            pickInput.focus();
+          }
+        }, 350);
+
+        return;
+      }
+
+      // Fallback for modal if modal is present
+      if (modal) {
+        // Reset form progress and view state
+        if (typeof window.resetQuoteForm === 'function') {
+          window.resetQuoteForm();
+        }
+
+        // Handle State Context
+        if (stateName || stateCode) {
+          const resolved = resolveState(stateCode || stateName);
+          const displayName = resolved ? resolved.name : (stateName || stateCode);
+          const defaultZip = resolved ? resolved.zip : '';
+
+          if (titleEl) {
+            titleEl.textContent = 'Get a Quote for ' + displayName;
+          }
+          if (subEl) {
+            subEl.textContent = 'Direct nationwide auto transport to or from ' + displayName + '. Rapid coordinator dispatch & competitive carrier rates.';
+          }
+          if (stateBadgeEl && stateNameEl) {
+            stateNameEl.textContent = displayName;
+            stateBadgeEl.style.display = 'flex';
+          }
+
+          if (form) {
+            const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+            if (pickInput) {
+              pickInput.value = pickupZip || defaultZip;
+            }
+          }
+        } else {
+          // Generic / Default Title
+          if (titleEl) {
+            titleEl.textContent = customTitle || 'Get a Free Quote';
+          }
+          if (subEl) {
+            subEl.textContent = 'Complete vehicle & route details below for real-time coordinator review.';
+          }
+          if (stateBadgeEl) {
+            stateBadgeEl.style.display = 'none';
+          }
+          if (form) {
+            const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+            if (pickInput) pickInput.value = pickupZip || '';
+          }
+        }
+
+        // Handle Route Drop-off ZIP
+        if (form) {
+          const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
+          if (dropInput) dropInput.value = dropoffZip || '';
+        }
+
+        // Handle Trailer Type
+        if (form && trailerType) {
+          const trailerRadio = form.querySelector(`input[name="Trailer-Type"][value="${trailerType}"]`);
+          if (trailerRadio) trailerRadio.checked = true;
+        }
+
+        // Open Modal
+        modal.classList.add('is-active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('amu-modal-open');
+
+        // Autofocus
+        setTimeout(function () {
+          if (!form) return;
+          const pickInput = form.querySelector('[name="Pick-Up-ZIP-Code"]');
+          const dropInput = form.querySelector('[name="Drop-Off-Zip-Code"]');
+          if (pickInput && !pickInput.value.trim()) {
+            pickInput.focus();
+          } else if (dropInput) {
+            dropInput.focus();
+          }
+        }, 150);
+      }
     }
 
     function closeQuoteModal() {
-      modal.classList.remove('is-active');
-      modal.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('amu-modal-open');
+      if (modal) {
+        modal.classList.remove('is-active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('amu-modal-open');
+      }
     }
 
     // Expose globally for map, routes, and external callers
@@ -1615,7 +1691,7 @@
 
     // Escape key listener
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+      if (e.key === 'Escape' && modal && modal.classList.contains('is-active')) {
         closeQuoteModal();
       }
     });
@@ -1636,28 +1712,12 @@
       });
     }
 
-    // Hero Starter Card Button
-    const starterBtn = document.getElementById('amu-hero-starter-btn');
-    if (starterBtn) {
-      starterBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        const pick = document.getElementById('starter-pick-zip')?.value.trim() || '';
-        const drop = document.getElementById('starter-drop-zip')?.value.trim() || '';
-        openQuoteModal({
-          pickupZip: pick,
-          dropoffZip: drop,
-          title: 'Get a Free Quote'
-        });
-      });
-    }
-
     // Universal Trigger Binding: All "Get a Quote" buttons & links
     const quoteTriggers = document.querySelectorAll(
-      '[data-open-quote-modal], a[href="#quote-modal"], a[href="#quote-section"], a[href="#quote-form-card"]'
+      '[data-open-quote-modal], a[href="#quote-modal"], a[href="#quote-section"], a[href="#quote-form-card"], a[href="#amu-hero-quote-form"]'
     );
 
     quoteTriggers.forEach(function (trigger) {
-      if (trigger.id === 'amu-hero-starter-btn') return; // Handled above
       trigger.addEventListener('click', function (e) {
         e.preventDefault();
 
