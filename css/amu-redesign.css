@@ -3534,6 +3534,16 @@ textarea.amu-form-control {
     margin-top: -85px;
   }
 
+  .amu-hero,
+  .amu-hero .amu-hero-bg-layer {
+    background-image:
+      linear-gradient(180deg, rgba(10, 22, 40, 0.72) 0%, rgba(10, 22, 40, 0.42) 35%, rgba(10, 22, 40, 0.8) 100%),
+      url('../images/mobhero.png');
+    background-size: cover;
+    background-position: 75% -350px;
+    background-repeat: no-repeat;
+  }
+
   .amu-page-hero {
     padding: 105px 0 40px;
     margin-top: -85px;
