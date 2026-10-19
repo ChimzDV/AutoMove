@@ -2518,18 +2518,51 @@ textarea.amu-form-control {
 /* ==========================================================================
    Comparison Table (Open vs Enclosed)
    ========================================================================== */
+/* ==========================================================================
+   Comparison Table (Open vs Enclosed)
+   ========================================================================== */
+.amu-table-scroll-hint {
+  display: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--amu-blue);
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+
 .amu-table-wrap {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md);
   border: 1px solid var(--amu-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 18px rgba(16, 27, 45, 0.06);
   background: var(--amu-white);
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(10, 102, 194, 0.3) transparent;
+}
+
+.amu-table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.amu-table-wrap::-webkit-scrollbar-track {
+  background: #F0F2F5;
+  border-radius: 4px;
+}
+
+.amu-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(10, 102, 194, 0.35);
+  border-radius: 4px;
 }
 
 .amu-compare-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: left;
 }
 
@@ -2538,6 +2571,9 @@ textarea.amu-form-control {
   padding: 18px 22px;
   border-bottom: 1px solid var(--amu-border);
   font-size: 0.95rem;
+  line-height: 1.5;
+  vertical-align: top;
+  box-sizing: border-box;
 }
 
 .amu-compare-table th {
@@ -2545,15 +2581,112 @@ textarea.amu-form-control {
   color: var(--amu-white);
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  padding: 18px 22px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  white-space: nowrap;
 }
 
 .amu-compare-table th:first-child {
   background: var(--amu-charcoal);
+  width: 28%;
 }
 
-.amu-compare-table tr:hover td {
-  background: var(--amu-grey-bg);
+.amu-compare-table th:nth-child(2),
+.amu-compare-table th:nth-child(3) {
+  width: 36%;
+}
+
+.amu-compare-table tbody tr:nth-child(even) td {
+  background: #FAFBFD;
+}
+
+.amu-compare-table tbody tr:hover td {
+  background: #F0F5FA;
+}
+
+.amu-compare-table td:first-child {
+  font-weight: 600;
+  color: var(--amu-navy);
+}
+
+.amu-compare-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   Logistics Standards (Fleet & Compliance Standards)
+   ========================================================================== */
+.amu-standards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+.amu-standard-card {
+  background: var(--amu-navy-card);
+  border: 1px solid var(--amu-navy-border);
+  padding: 30px 24px;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.amu-standard-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(10, 102, 194, 0.45);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+}
+
+.amu-standard-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(10, 102, 194, 0.16);
+  border: 1px solid rgba(10, 102, 194, 0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.amu-standard-label {
+  font-size: 0.82rem;
+  color: #CBD2DE;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.amu-standard-value {
+  font-size: 1.45rem;
+  color: var(--amu-white);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.amu-standard-desc {
+  font-size: 0.88rem;
+  color: #8E98A8;
+  line-height: 1.5;
+  margin: 0;
 }
 
 /* ==========================================================================
@@ -4087,6 +4220,71 @@ textarea.amu-form-control {
   .amu-anim-heading.in-view>*:nth-child(3) {
     animation-duration: 0.5s !important;
   }
+
+  /* Comparison Table Mobile Optimization */
+  .amu-table-scroll-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(10, 102, 194, 0.08);
+    border: 1px solid rgba(10, 102, 194, 0.18);
+    border-radius: var(--radius-full);
+    margin: 0 auto 14px;
+    color: var(--amu-blue);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .amu-table-wrap {
+    margin-bottom: 24px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 10px rgba(16, 27, 45, 0.05);
+  }
+
+  .amu-compare-table {
+    min-width: 580px;
+    width: 100%;
+  }
+
+  .amu-compare-table th,
+  .amu-compare-table td {
+    padding: 13px 15px;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .amu-compare-table th {
+    font-size: 0.92rem;
+    padding: 14px 15px;
+  }
+
+  .amu-compare-table th:first-child {
+    width: 30%;
+    min-width: 155px;
+  }
+
+  .amu-compare-table th:nth-child(2),
+  .amu-compare-table th:nth-child(3) {
+    width: 35%;
+    min-width: 210px;
+  }
+
+  /* Logistics Standards Mobile Optimization */
+  .amu-standards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 100%;
+  }
+
+  .amu-standard-card {
+    padding: 24px 20px;
+  }
+
+  .amu-standard-value {
+    font-size: 1.35rem;
+  }
 }
 
 /* Very Narrow Smartphones (<= 340px, e.g. Galaxy Z Fold outer display) */
@@ -4118,6 +4316,35 @@ textarea.amu-form-control {
   .amu-hero-cta-group .amu-btn,
   .amu-final-cta-actions .amu-btn {
     flex: 1 1 100%;
+  }
+
+  .amu-standards-grid {
+    gap: 12px;
+  }
+
+  .amu-standard-card {
+    padding: 18px 14px;
+  }
+
+  .amu-standard-icon-wrap {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+
+  .amu-standard-value {
+    font-size: 1.22rem;
+  }
+
+  .amu-standard-desc {
+    font-size: 0.82rem;
+  }
+
+  .amu-compare-table th,
+  .amu-compare-table td {
+    padding: 11px 12px;
+    font-size: 0.82rem;
   }
 }
 
@@ -6651,122 +6878,4 @@ body.amu-modal-open {
   }
 }
 
-/* ==========================================================================
-   13. Floating Mobile "Get a Free Quote" Button
-   Visible only on mobile devices (<= 768px). Fixed at bottom center.
-   ========================================================================== */
-.amu-mobile-floating-quote {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .amu-mobile-floating-quote {
-    position: fixed;
-    bottom: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    left: 50%;
-    transform: translate3d(-50%, 20px, 0) scale(0.96);
-    z-index: 99980;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    padding: 10px 18px;
-    min-height: 42px;
-    max-width: calc(100vw - 120px);
-
-    background: linear-gradient(135deg, #0A66C2 0%, #08529C 100%);
-    color: #FFFFFF !important;
-    text-decoration: none !important;
-
-    font-family: var(--font-heading, 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif);
-    font-size: 0.86rem;
-    font-weight: 700;
-    letter-spacing: 0.015em;
-    line-height: 1;
-    white-space: nowrap;
-
-    border-radius: var(--radius-full, 9999px);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    box-shadow: 0 6px 20px rgba(10, 102, 194, 0.38), 0 2px 6px rgba(16, 27, 45, 0.16);
-
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    cursor: pointer;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    -webkit-user-select: none;
-
-    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                visibility 0.32s ease,
-                background-color 0.2s ease,
-                box-shadow 0.2s ease;
-  }
-
-  /* Subtle entrance animation when active / visible */
-  .amu-mobile-floating-quote.is-visible {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translate3d(-50%, 0, 0) scale(1);
-  }
-
-  /* Active tap feedback */
-  .amu-mobile-floating-quote:active {
-    transform: translate3d(-50%, 1px, 0) scale(0.97);
-    box-shadow: 0 3px 10px rgba(10, 102, 194, 0.35);
-    background: linear-gradient(135deg, #08529C 0%, #063D75 100%);
-  }
-
-  .amu-mobile-floating-quote .amu-floating-quote-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-  }
-
-  .amu-mobile-floating-quote:active .amu-floating-quote-icon {
-    transform: translateX(2px);
-  }
-
-  /* Screen <= 380px compact adjustment */
-  @media (max-width: 380px) {
-    .amu-mobile-floating-quote {
-      padding: 8px 14px;
-      min-height: 38px;
-      font-size: 0.78rem;
-      gap: 6px;
-      max-width: calc(100vw - 100px);
-    }
-  }
-
-  /* Safeguards: Hide when drawer menu, modal, chatbot panel, or form inputs are focused/open */
-  body.amu-menu-open .amu-mobile-floating-quote,
-  body.amu-modal-open .amu-mobile-floating-quote,
-  body.amu-chat-panel-open .amu-mobile-floating-quote,
-  .amu-mobile-floating-quote.is-hidden,
-  .amu-mobile-floating-quote.amu-hide-on-focus {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    transform: translate3d(-50%, 18px, 0) scale(0.95) !important;
-  }
-}
-
-@media (min-width: 769px) {
-  .amu-mobile-floating-quote {
-    display: none !important;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .amu-mobile-floating-quote {
-    transition: none !important;
-  }
-}
+
