@@ -2362,6 +2362,8 @@ textarea.amu-form-control {
 .amu-footer-contact-location {
   color: var(--amu-text-light);
   font-size: 0.82rem;
+  line-height: 1.35;
+  text-align: right;
 }
 
 /* Compact Understated SMS Disclosure */
@@ -2437,8 +2439,13 @@ textarea.amu-form-control {
 
   .amu-footer-contact {
     align-items: flex-start;
+    text-align: left;
     gap: 8px;
     width: 100%;
+  }
+
+  .amu-footer-contact-location {
+    text-align: left;
   }
 
   .amu-footer-disclosure {
@@ -3295,14 +3302,66 @@ textarea.amu-form-control {
     display: none;
   }
 
+  /* Polished compact sticky header for mobile */
+  .amu-header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgba(16, 27, 45, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .amu-header.scrolled {
+    background: #101B2D;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.38);
+  }
+
+  .amu-nav-inner {
+    height: 58px;
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
   .amu-nav-menu,
-  .amu-nav-actions .amu-btn,
   .amu-nav-phone {
     display: none;
   }
 
+  .amu-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Sticky prominent Get a Free Quote button on mobile */
+  .amu-nav-actions .amu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    border-radius: 6px;
+    white-space: nowrap;
+    line-height: 1.2;
+    min-height: 34px;
+    box-shadow: 0 2px 10px rgba(10, 102, 194, 0.38);
+    text-shadow: none;
+    flex-shrink: 0;
+  }
+
   .amu-mobile-toggle {
     display: flex;
+    padding: 5px;
+    min-width: 36px;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
   }
 
   .amu-process-grid {
@@ -3312,6 +3371,22 @@ textarea.amu-form-control {
 
   .amu-partners-row {
     gap: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .amu-nav-actions {
+    gap: 6px;
+  }
+  .amu-nav-actions .amu-btn {
+    padding: 5px 8px;
+    font-size: 0.72rem;
+    min-height: 30px;
+  }
+  .amu-mobile-toggle {
+    padding: 4px;
+    min-width: 32px;
+    min-height: 32px;
   }
 }
 
@@ -6563,5 +6638,125 @@ body.amu-modal-open {
   .amu-radio-pills {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+}
+
+/* ==========================================================================
+   13. Floating Mobile "Get a Free Quote" Button
+   Visible only on mobile devices (<= 768px). Fixed at bottom center.
+   ========================================================================== */
+.amu-mobile-floating-quote {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .amu-mobile-floating-quote {
+    position: fixed;
+    bottom: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translate3d(-50%, 20px, 0) scale(0.96);
+    z-index: 99980;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+    min-height: 42px;
+    max-width: calc(100vw - 120px);
+
+    background: linear-gradient(135deg, #0A66C2 0%, #08529C 100%);
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+
+    font-family: var(--font-heading, 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif);
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.015em;
+    line-height: 1;
+    white-space: nowrap;
+
+    border-radius: var(--radius-full, 9999px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 6px 20px rgba(10, 102, 194, 0.38), 0 2px 6px rgba(16, 27, 45, 0.16);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.32s ease,
+                background-color 0.2s ease,
+                box-shadow 0.2s ease;
+  }
+
+  /* Subtle entrance animation when active / visible */
+  .amu-mobile-floating-quote.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+
+  /* Active tap feedback */
+  .amu-mobile-floating-quote:active {
+    transform: translate3d(-50%, 1px, 0) scale(0.97);
+    box-shadow: 0 3px 10px rgba(10, 102, 194, 0.35);
+    background: linear-gradient(135deg, #08529C 0%, #063D75 100%);
+  }
+
+  .amu-mobile-floating-quote .amu-floating-quote-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .amu-mobile-floating-quote:active .amu-floating-quote-icon {
+    transform: translateX(2px);
+  }
+
+  /* Screen <= 380px compact adjustment */
+  @media (max-width: 380px) {
+    .amu-mobile-floating-quote {
+      padding: 8px 14px;
+      min-height: 38px;
+      font-size: 0.78rem;
+      gap: 6px;
+      max-width: calc(100vw - 100px);
+    }
+  }
+
+  /* Safeguards: Hide when drawer menu, modal, chatbot panel, or form inputs are focused/open */
+  body.amu-menu-open .amu-mobile-floating-quote,
+  body.amu-modal-open .amu-mobile-floating-quote,
+  body.amu-chat-panel-open .amu-mobile-floating-quote,
+  .amu-mobile-floating-quote.is-hidden,
+  .amu-mobile-floating-quote.amu-hide-on-focus {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translate3d(-50%, 18px, 0) scale(0.95) !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .amu-mobile-floating-quote {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amu-mobile-floating-quote {
+    transition: none !important;
   }
 }

@@ -203,7 +203,8 @@
         </ul>
 
         <div class="amu-nav-actions">
-          <a href="#amu-hero-quote-form" class="amu-btn amu-btn-primary amu-btn-sm amu-btn-glow" data-open-quote-modal>Get a
+          <a href="#amu-hero-quote-form" class="amu-btn amu-btn-primary amu-btn-sm amu-btn-glow"
+            data-open-quote-modal>Get a
             Free Quote</a>
           <!-- Animated Hamburger Button -->
           <button class="amu-mobile-toggle" aria-label="Open mobile navigation menu" aria-expanded="false"
@@ -245,13 +246,27 @@
         </svg>
         Call Dispatch: (727) 255-8232
       </a>
-      <a href="#amu-hero-quote-form" class="amu-btn amu-btn-primary amu-btn-full amu-btn-glow" data-open-quote-modal>Get a Free
+      <a href="#amu-hero-quote-form" class="amu-btn amu-btn-primary amu-btn-full amu-btn-glow" data-open-quote-modal>Get
+        a Free
         Quote</a>
       <p style="font-size:0.75rem; color:#8E98A8; text-align:center; margin-top:8px; margin-bottom:0;">
         🇺🇸 Service-Disabled Veteran-Owned Small Business
       </p>
     </div>
   </div>
+
+  <!-- Floating Mobile "Get a Free Quote" Button -->
+  <a href="#amu-hero-quote-form" class="amu-mobile-floating-quote" id="amu-mobile-floating-quote" data-open-quote-modal
+    aria-label="Get a Free Quote">
+    <span>Get a Free Quote</span>
+    <span class="amu-floating-quote-icon" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd"
+          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+          clip-rule="evenodd" />
+      </svg>
+    </span>
+  </a>
 
   <main>
     <!-- Section 1: Hero Section + Quick Quote Form -->
@@ -489,8 +504,8 @@
                     <label class="amu-form-label" for="hero-phone">
                       Phone Number <span class="req">*</span>
                     </label>
-                    <input type="tel" id="hero-phone" name="Phone-rq" class="amu-form-control" placeholder="(555) 000-0000"
-                      autocomplete="tel" inputmode="tel" required>
+                    <input type="tel" id="hero-phone" name="Phone-rq" class="amu-form-control"
+                      placeholder="(555) 000-0000" autocomplete="tel" inputmode="tel" required>
                   </div>
                 </div>
 
@@ -601,7 +616,7 @@
             <div class="amu-service-img-wrap">
               <img src="images/enclosed-transport-cl.webp"
                 alt="Enclosed car transport trailer for luxury and classic vehicles" loading="lazy">
-              <span class="amu-service-badge" style="background:var(--amu-red);">Maximum Protection</span>
+              <span class="amu-service-badge">Maximum Protection</span>
             </div>
             <div class="amu-service-body">
               <h3 class="amu-service-title">Enclosed Auto Transport</h3>
@@ -942,8 +957,7 @@
         <!-- 4 Milestone Interactive Timeline Checkpoints -->
         <div class="amu-highway-checkpoints amu-stagger-group">
           <div class="amu-checkpoint-node amu-stagger-item active" data-checkpoint="1" tabindex="0">
-            <span class="amu-checkpoint-tag">Step 01 &bull; Origin</span>
-            <h3 class="amu-checkpoint-title">1. Request a Quote</h3>
+            <span class="amu-checkpoint-tag">Step 01 &bull; Request a Quote</span>
             <p class="amu-checkpoint-desc">
               Submit origin &amp; destination ZIP codes with vehicle details. Our coordinators check lane capacity in
               real-time.
@@ -951,8 +965,7 @@
           </div>
 
           <div class="amu-checkpoint-node amu-stagger-item" data-checkpoint="2" tabindex="0">
-            <span class="amu-checkpoint-tag">Step 02 &bull; Verification</span>
-            <h3 class="amu-checkpoint-title">2. Confirm Shipment</h3>
+            <span class="amu-checkpoint-tag">Step 02 &bull; Confirm Shipment</span>
             <p class="amu-checkpoint-desc">
               Select open or enclosed trailer. We confirm schedule feasibility and match an FMCSA-authorized insured
               carrier.
@@ -960,8 +973,7 @@
           </div>
 
           <div class="amu-checkpoint-node amu-stagger-item" data-checkpoint="3" tabindex="0">
-            <span class="amu-checkpoint-tag">Step 03 &bull; Transit</span>
-            <h3 class="amu-checkpoint-title">3. Vehicle Pickup</h3>
+            <span class="amu-checkpoint-tag">Step 03 &bull; Vehicle Pickup</span>
             <p class="amu-checkpoint-desc">
               The licensed carrier performs a comprehensive inspection, secures your vehicle, and begins interstate
               transit.
@@ -969,8 +981,7 @@
           </div>
 
           <div class="amu-checkpoint-node amu-stagger-item" data-checkpoint="4" tabindex="0">
-            <span class="amu-checkpoint-tag">Step 04 &bull; Destination</span>
-            <h3 class="amu-checkpoint-title">4. Safe Delivery</h3>
+            <span class="amu-checkpoint-tag">Step 04 &bull; Safe Delivery</span>
             <p class="amu-checkpoint-desc">
               Direct door-to-door delivery. Conduct the final inspection alongside the driver, sign the Bill of Lading,
               and complete the move.
@@ -1385,7 +1396,7 @@
                     <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#0A66C2" flood-opacity="0.75" />
                   </filter>
 
-                  <!-- Define Detailed Commercial Car Carrier Transport Trucks (Fleet Variants - 2x Scale & High Contrast) -->
+                  <!-- Define Detailed Commercial Car Carrier Transport Trucks (Fleet Variants - Standard Scale & High Contrast) -->
 
                   <!-- Fleet Variant 1: AutoMove Royal Blue Cab, Crimson Coupe Over Cab, Pure White SUV, Electric Gold Sedan, Silver Hatch, Cyan Belly Coupe -->
                   <g id="amu-car-carrier-truck" transform="scale(2)">
@@ -1873,6 +1884,11 @@
                   <!-- Rocky Mountain Front Range (Denver, CO -> Albuquerque, NM) -->
                   <path id="route-rocky-sb" d="M 320,270 C 322,295 310,320 285,335" />
                   <path id="route-rocky-nb" d="M 285,335 C 310,320 322,295 320,270" />
+                  <!-- Northeast to South Central Transcontinental (I-95 / I-81 / I-40 / I-30: Portland, ME -> Boston, MA -> New York, NY -> Dallas / FW, TX) -->
+                  <path id="route-medallas-sb"
+                    d="M 888,110 C 880,128 873,142 865,155 C 855,170 845,180 835,190 C 795,220 755,255 705,295 C 645,340 565,375 480,400" />
+                  <path id="route-medallas-nb"
+                    d="M 480,400 C 565,375 645,340 705,295 C 755,255 795,220 835,190 C 845,180 855,170 865,155 C 873,142 880,128 888,110" />
                 </defs>
 
                 <!-- Background Transcontinental Coordinate Grid -->
@@ -2369,6 +2385,11 @@
                   <!-- Rocky Mountain Front Range (Denver -> Albuquerque) -->
                   <path class="amu-route-glow" d="M 320,270 C 322,295 310,320 285,335" />
                   <path class="amu-route-line" d="M 320,270 C 322,295 310,320 285,335" />
+                  <!-- I-95 / I-81 / I-40 Maine to Dallas Corridor (Portland, ME -> Boston -> New York -> Dallas) -->
+                  <path class="amu-route-glow"
+                    d="M 888,110 C 880,128 873,142 865,155 C 855,170 845,180 835,190 C 795,220 755,255 705,295 C 645,340 565,375 480,400" />
+                  <path class="amu-route-line"
+                    d="M 888,110 C 880,128 873,142 865,155 C 855,170 845,180 835,190 C 795,220 755,255 705,295 C 645,340 565,375 480,400" />
                 </g>
 
                 <!-- Major Dispatch Hub Markers Layer -->
@@ -2449,6 +2470,10 @@
                   <g class="amu-hub-group">
                     <circle cx="865" cy="155" r="4.5" class="amu-hub-core" />
                     <text x="876" y="152" text-anchor="start" class="amu-hub-text">Boston, MA</text>
+                  </g>
+                  <g class="amu-hub-group">
+                    <circle cx="888" cy="110" r="4.5" class="amu-hub-core" />
+                    <text x="880" y="106" text-anchor="end" class="amu-hub-text">Portland, ME</text>
                   </g>
                 </g>
 
@@ -3075,7 +3100,7 @@
               <path
                 d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" />
             </svg>
-            <span>St. Petersburg, Florida</span>
+            <span>7901 4th St N STE #36497, St. Petersburg, FL 33702</span>
           </div>
         </div>
       </div>
